@@ -1868,12 +1868,18 @@ class ObjectManager
      * This is called when setting the UUID property of a node to ensure that
      * it can be subsequently referenced by the UUID.
      *
+     * If $validate is `true`, then allow the UUID to be updated - this
+     * happens when importing data with the
+     * ImportUUIDBehaviorInterface::IMPORT_UUID_COLLISION_REPLACE_EXISTING flag
+     * is used.
+     *
      * @param string $uuid
      * @param string $absPath
+     * @param bool $validate
      */
-    public function registerUuid($uuid, $absPath)
+    public function registerUuid($uuid, $absPath, $validate = true)
     {
-        if (isset($this->objectsByUuid[$uuid])) {
+        if (true === $validate && isset($this->objectsByUuid[$uuid])) {
             throw new RuntimeException(sprintf(
                 'Object path for UUID "%s" has already been registered to "%s"',
                 $uuid, $this->objectsByUuid[$uuid]
